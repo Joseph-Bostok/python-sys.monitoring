@@ -84,7 +84,7 @@ def init_monitoring():
 def main():
     init_monitoring()
 
-    NUM_RUNS = 100
+    NUM_RUNS = 50
     for _ in range(NUM_RUNS):
         run_workload()
         if call_stack:
@@ -113,7 +113,7 @@ def main():
         #sort rows by total time
         rows.sort(reverse=True, key = lambda r: r[0])
 
-        # Header similar in spirit to cProfile
+        # Header similar to cProfile
         print(f"{'calls':>7} {'total':>10} {'avg':>10} {'stddev':>10} {'min':>10} {'max':>10}  function")
         for total, calls, mean, stddev, mn, mx, filename, lineno, funcname in rows[:40]:
             print(
