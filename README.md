@@ -84,21 +84,25 @@ we are using python 3.12 plus to access the sys.mon, need pytorch and numpy inst
 
 # 1) workload
 right now the sys.mon and cProfile give similar outputs, but need to be validated
+
 potential plan: 
 For run_workload, train_step, forward_pass, record from both:
 ncalls from cProfile vs calls from sysmon.
 cumtime from cProfile vs total_time from sysmon.
 Compute differences (percentage error).
+
 Deliverable:
 A short table + paragraph: “here is how close sys.monitoring’s numbers are to cProfile on a PyTorch workload, and where they differ.”
 
 # 2) evolving pylttng from stub -> C extension using LTTng-UST (linux)
 this would be the first real step to using LTTNG
 On a Linux machine, write a minimal C extension module pylttng that exposes trace_function_stats(...) to Python.
+
 Inside that, define and call an LTTng-UST tracepoint (e.g. tracepoint(sysmon, function_stats, ...)) with fields:
 filename, lineno, funcname, calls, total_time, avg_time, etc.
 Keep the Python API identical to your current stub so sysmon_profiler.py doesn’t change at all.
 Use the LTTng CLI to create a session and capture those events.
+
 Deliverable:
 A working Python script on Linux that:
 Runs the same sysmon_profiler.py
@@ -141,3 +145,4 @@ sys.monitoring + pylttng = how you generate events
 LTTng = how you log them efficiently
 
 Babeltrace = how you look at and analyze those logs after the fact (including token timings, function stats, etc.).
+
