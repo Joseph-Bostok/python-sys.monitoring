@@ -78,3 +78,66 @@ sort cumulative
 stats 20
 quit
 
+
+1/6 project updates
+we are using python 3.12 plus to access the sys.mon, need pytorch and numpy installed on the same interpreter the profiler runs on
+
+# 1) workload
+right now the sys.mon and cProfile give similar outputs, but need to be validated
+potential plan: 
+For run_workload, train_step, forward_pass, record from both:
+ncalls from cProfile vs calls from sysmon.
+cumtime from cProfile vs total_time from sysmon.
+Compute differences (percentage error).
+Deliverable:
+A short table + paragraph: “here is how close sys.monitoring’s numbers are to cProfile on a PyTorch workload, and where they differ.”
+
+# 2) evolving pylttng from stub -> C extension using LTTng-UST (linux)
+this would be the first real step to using LTTNG
+On a Linux machine, write a minimal C extension module pylttng that exposes trace_function_stats(...) to Python.
+Inside that, define and call an LTTng-UST tracepoint (e.g. tracepoint(sysmon, function_stats, ...)) with fields:
+filename, lineno, funcname, calls, total_time, avg_time, etc.
+Keep the Python API identical to your current stub so sysmon_profiler.py doesn’t change at all.
+Use the LTTng CLI to create a session and capture those events.
+Deliverable:
+A working Python script on Linux that:
+Runs the same sysmon_profiler.py
+Produces actual LTTng traces you can inspect with Babeltrace. (or anything else ) - this is a log viewer for LTTng and other CTF traces.
+Babeltrace is basically the log viewer / converter for LTTng and other CTF traces.
+
+# 4) babeltrace
+
+LTTng writes traces in CTF (Common Trace Format) – that’s a binary format.
+
+Babeltrace is a tool + library that can:
+
+Read those CTF trace directories.
+
+Dump them as human-readable text (like less for traces).
+
+Convert between formats (e.g., CTF ⇄ other trace formats).
+
+Let you write scripts that process traces programmatically (via its library bindings).
+
+So the workflow looks like:
+
+Your Python + pylttng + C extension emit LTTng-UST tracepoints.
+
+LTTng records those into a CTF trace directory.
+
+You use Babeltrace to:
+
+Inspect events:
+
+babeltrace /path/to/trace
+
+
+Filter, grep, sort, or post-process them.
+
+Feed them into analysis scripts (Python, etc.) if you use the library side.
+
+sys.monitoring + pylttng = how you generate events
+
+LTTng = how you log them efficiently
+
+Babeltrace = how you look at and analyze those logs after the fact (including token timings, function stats, etc.).
