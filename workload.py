@@ -1,22 +1,17 @@
-import torch
+import numpy as np
 
-def forward_pass(model, x):
-    y = model(x)
-    loss = y.sum()
-    return y, loss
+def forward_pass(x):
+    # fake model math
+    return np.tanh(x @ x.T)
 
-def train_step(model, x):
-    y, loss = forward_pass(model, x)
-    loss.backward()
-    model.zero_grad(set_to_none=True)
+def train_step(x):
+    y = forward_pass(x)
+    return np.sum(y)
 
 def run_workload():
-    model = torch.nn.Linear(512, 512)
-    x = torch.randn(1024, 512)
-
-    for _ in range(50):
-        train_step(model, x)
+    x = np.random.randn(1024, 512)
+    for _ in range(100):
+        train_step(x)
 
 if __name__ == "__main__":
     run_workload()
-
