@@ -6,6 +6,14 @@
 
     # try to find a way to separate the workload from the profiler, so that we can run the workload multiple times
     # and average the results. no neeed to change the tool every time we run the workload.
+    # (1/6)try a different approach with line numbers, try to use a different identifier when working with mulitple files.
+    # how to measure overhead, and see how it differs between other data structures.
+    # maybe use a different approach to measure time, like time.perf_counter() or time.process_time()
+    # hashtable should not have string as key, needs to be unqieu function identifier, string is not efficient. maybe use integer number, 
+    # maybe can use array or other data strcuture to make it more efficient.
+    # if we need to connect the profiling with LTTNG since itd in c, then we need to use sys mon, we need to go through the process of calling the functins through c
+    #
+
 
 import sys
 import os
@@ -19,6 +27,7 @@ from workload import run_workload
 mon = sys.monitoring
 E = mon.events
 TOOL_ID = mon.DEBUGGER_ID
+
 
 stats = defaultdict(lambda: {
     "calls": 0, # number of times the function is called

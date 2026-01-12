@@ -1,0 +1,17 @@
+    # add a way to get the number of functions being 
+    # and print it out in the end of the program, maybe create a hastable that stores the function with the call time and function count
+    # each time its called, add time, or record each time its called. 
+    # in the hash table, we know how many times its called, and total time, STDDEV, and highest / lowest time that the function is executed
+    # key is function name, value is time and counter
+
+    # try to find a way to separate the workload from the profiler, so that we can run the workload multiple times
+    # and average the results. no neeed to change the tool every time we run the workload.
+    # (1/6)try a different approach with line numbers, try to use a different identifier when working with mulitple files.
+    # how to measure overhead, and see how it differs between other data structures.
+    # maybe use a different approach to measure time, like time.perf_counter() or time.process_time()
+    # hashtable should not have string as key, needs to be unqieu function identifier, string is not efficient. maybe use integer number, 
+    # maybe can use array or other data strcuture to make it more efficient.
+    # if we need to connect the profiling with LTTNG since itd in c, then we need to use sys mon, we need to go through the process of calling the functins through c
+    # first we need to decide this approach, save a lot of time to use a pyeval with LTTNG-ust
+    next step: try to use cprofile, rebuild it so we can use the profiler. create another version of cprofiler and rebuild the runtime to see what we want. create a new version of python command so we can use what we want. this is bascailly a shared library file. 
+    clone the cprofile repo, find the function that is relevant to function calls, and add some print functions so we can get an idea of how its working. 
