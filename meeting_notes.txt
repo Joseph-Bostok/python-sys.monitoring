@@ -19,7 +19,7 @@
     1/12
     cloned the repo and tried a new "hacked" version of cpython and created a VENV for it. it takes about a minute for it to process and actually work, but it does work.
     (i highly recommend putting these in the same mother/root directory) 
-    
+
     
     navigate to the python-sys.monitoring directory,
     cd ~/cProfiler/python-sys.monitoring
@@ -57,4 +57,32 @@
 
     issues when approaching this:
     I had an environment mismatch which broke the system when trying to implement. 
+    i had to learn how to use patches so i dont have the cpython library with every file.
+    I had to learn how to configure files to  
+
+    **GENERATED STEPS**
+    ### Patched CPython for cProfile/sys.monitoring
+
+These experiments require a patched CPython so that `cProfile` uses
+our `sys.monitoring` hooks.
+
+Steps:
+
+```bash
+# 1) Clone CPython at a supported version
+git clone https://github.com/python/cpython.git
+cd cpython
+git checkout v3.12.7   # or whatever tag is needed, 3.12/3.13/3.15
+
+# 2) Apply our patch
+git apply /path/to/python-sys.monitoring/patches/cpython_lsprof_sysmon.patch
+
+# 3) Build
+./configure
+make -j8
+
+# 4) Use the patched interpreter
+./python -m cProfile -o /tmp/hacked_cprofile_stats.dat \
+    /path/to/python-sys.monitoring/workload.py
+
 
