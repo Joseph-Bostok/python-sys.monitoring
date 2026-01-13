@@ -15,3 +15,46 @@
     # first we need to decide this approach, save a lot of time to use a pyeval with LTTNG-ust
     next step: try to use cprofile, rebuild it so we can use the profiler. create another version of cprofiler and rebuild the runtime to see what we want. create a new version of python command so we can use what we want. this is bascailly a shared library file. 
     clone the cprofile repo, find the function that is relevant to function calls, and add some print functions so we can get an idea of how its working. 
+
+    1/12
+    cloned the repo and tried a new "hacked" version of cpython and created a VENV for it. it takes about a minute for it to process and actually work, but it does work.
+    (i highly recommend putting these in the same mother/root directory) 
+    
+    
+    navigate to the python-sys.monitoring directory,
+    cd ~/cProfiler/python-sys.monitoring
+
+    create a new VENV with the new cpython 
+    ../cpython/python -m venv .venv
+
+    activate it and check version, should be on 3.12 / 3.13 / 3.15
+    cd ~/cProfiler/python-sys.monitoring
+    source .venv/bin/activate
+    python -V
+
+    install dependencies
+    pip install --upgrade pip
+    pip install numpy
+    pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+    run files
+
+    raw tracer:
+    python tracer.py
+
+    sysmon profiler:
+    python sysmon_profiler.py
+
+    baseline cProfile inside VENV
+    python -m cProfile -o cprofile_stats.dat workload.py
+    python -m pstats cprofile_stats.dat
+    sort cumulative
+    stats 20
+    quit
+
+    created a new branch sysmon-cprofile-experiment
+    this has the cProfiler patch i need to make this work.
+
+    issues when approaching this:
+    I had an environment mismatch which broke the system when trying to implement. 
+
