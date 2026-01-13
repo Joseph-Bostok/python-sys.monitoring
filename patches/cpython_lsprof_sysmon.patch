@@ -1,0 +1,42 @@
+diff --git a/Modules/_lsprof.c b/Modules/_lsprof.c
+index 2c82b18c0e1..d2d4049cf93 100644
+--- a/Modules/_lsprof.c
++++ b/Modules/_lsprof.c
+@@ -6,6 +6,7 @@
+ #include "pycore_call.h"          // _PyObject_CallNoArgs()
+ #include "pycore_pystate.h"       // _PyThreadState_GET()
+ #include "rotatingtree.h"
++#include <stdio.h>
+ 
+ /************************************************************/
+ /* Written by Brett Rosen and Ted Czotter */
+@@ -605,11 +606,29 @@ setBuiltins(ProfilerObject *pObj, int nvalue)
+ PyObject* pystart_callback(ProfilerObject* self, PyObject *const *args, Py_ssize_t size)
+ {
+     PyObject* code = args[0];
++
++    /* Debug: log Python function starts seen by cProfile via sys.monitoring */
++    if (PyCode_Check(code)) {
++        PyCodeObject *co = (PyCodeObject *)code;
++
++        const char *funcname = PyUnicode_AsUTF8(co->co_name);
++        const char *filename = PyUnicode_AsUTF8(co->co_filename);
++        int lineno = co->co_firstlineno;
++
++        fprintf(stderr,
++                "CPROFILE PY_START: %s:%d -> %s\n",
++                filename ? filename : "<unknown>",
++                lineno,
++                funcname ? funcname : "<unknown>");
++    }
++
++    /* existing profiling behaviour – don’t remove this */
+     ptrace_enter_call((PyObject*)self, (void *)code, (PyObject *)code);
+ 
+     Py_RETURN_NONE;
+ }
+ 
++
+ PyObject* pyreturn_callback(ProfilerObject* self, PyObject *const *args, Py_ssize_t size)
+ {
+     PyObject* code = args[0];
