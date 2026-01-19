@@ -1,0 +1,30 @@
+# Python virtual environments
+.venv/
+venv/
+*.pyc
+__pycache__/
+
+# Build artifacts
+*.o
+*.so.bak
+*.dat.bak
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Submodule builds (cpython is tracked separately)
+cpython/build/
+cpython/*.o
+cpython/python
+cpython/libpython*.a
+
+# Keep modified library
+!modified_lib/*.so
