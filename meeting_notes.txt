@@ -86,3 +86,8 @@ make -j8
     /path/to/python-sys.monitoring/workload.py
 
 
+    1/13 - locate _ls.cpython.312 x86_64 and put it in a folder, the export pythonpath=/path/to/lib stored in.
+    then use system python with cprofile to run the application, it should be able to pick up the modified lib, not from the system
+    try to print iinformation for one group of functions, try to find a function in the lib that uses a compare of the names and manually pick up X function 
+    figure out how cProfiler calculates total time. could be timer start or acumulates all time together. see how the change that we make affects the time
+    
