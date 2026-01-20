@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 """
 Test script to verify the modified _lsprof library is being used.
-This should be run with system Python (3.10) using PYTHONPATH override.
+Run with: /home/jbostok/cProfiler/cpython/python -m cProfile test_modified_lsprof.py
 """
 import sys
-import cProfile
-import pstats
-from io import StringIO
 
 # Print which _lsprof is being loaded
 print("Python version:", sys.version)
@@ -43,14 +40,8 @@ def main():
     """Main workload function."""
     print("\n--- Running test workload ---")
 
-    # Get user input for fibonacci
-    try:
-        n = int(input("Enter N for fibonacci sequence (try 25-35 for visible timing): "))
-    except (ValueError, EOFError):
-        n = 25
-        print(f"Using default N = {n}")
-
-    # Test fibonacci
+    # Test fibonacci with N=30
+    n = 30
     result = fibonacci(n)
     print(f"fibonacci({n}) = {result}")
 
@@ -61,16 +52,4 @@ def main():
     print("--- Workload complete ---\n")
 
 if __name__ == '__main__':
-    # Profile the main function
-    profiler = cProfile.Profile()
-    profiler.enable()
-
     main()
-
-    profiler.disable()
-
-    # Print stats
-    s = StringIO()
-    ps = pstats.Stats(profiler, stream=s).sort_stats('cumulative')
-    ps.print_stats(10)
-    print(s.getvalue())
